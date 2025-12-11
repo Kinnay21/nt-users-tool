@@ -141,5 +141,3 @@ poetry.lock
 !nt_users_name.xlsx
 !test_nt_users_name_example.xlsx
 !test_nt_users_sorted.xlsx
-
-!.github
