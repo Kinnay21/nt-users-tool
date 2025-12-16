@@ -29,9 +29,9 @@ jobs:
         key: ${{ runner.os }}-poetry-${{ hashFiles('**/poetry.lock') }}
 
   test:
-  needs: lint
-  runs-on: ubuntu-latest
-  steps:
+    needs: lint
+    runs-on: ubuntu-latest
+    steps:
     - name: get code
       uses: actions/checkout@v4
     - name: Set up Python 3.11
