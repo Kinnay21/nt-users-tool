@@ -85,4 +85,4 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: executable
-        path: dist/nt_users_tool.exe
+        path: dist/nt_users_tool
