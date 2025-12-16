@@ -3,10 +3,11 @@ name: Pylint
 on: [push]
 
 jobs:
-  build:
+  lint:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
+    - name: get code
+      uses: actions/checkout@v4
     - name: Set up Python 3.11
       uses: actions/setup-python@v3
       with:
@@ -21,3 +22,33 @@ jobs:
       run: |
         ls
         poetry run pylint $(git ls-files '*.py')
+    - name: put the virtual env on the cache
+      uses: actions/cache@v3
+      with:
+        path: .venv
+        key: ${{ runner.os }}-poetry-${{ hashFiles('**/poetry.lock') }}
+
+  test:
+  needs: lint
+  runs-on: ubuntu-latest
+  steps:
+    - name: get code
+      uses: actions/checkout@v4
+    - name: Set up Python 3.11
+      uses: actions/setup-python@v3
+      with:
+        python-version: 3.11
+    - name: Cache dependencies
+      uses: actions/cache@v3
+      with:
+        path: .venv
+        key: ${{ runner.os }}-poetry-${{ hashFiles('**/poetry.lock') }}
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install poetry
+        poetry config virtualenvs.in-project true --local
+        poetry install
+    - name: test the code
+      run: |
+        poetry run pytest tests/ --cov=nt_users_tool --cov-report=xml
