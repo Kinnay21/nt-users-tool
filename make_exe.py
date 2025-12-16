@@ -3,7 +3,8 @@
 """
 import os
 import platform
-import shutil
+
+# import shutil
 
 import PyInstaller.__main__
 
@@ -27,20 +28,20 @@ def create():
             f".{os.sep}src{os.sep}nt_users_tool{os.sep}cli.py",
         ]
     )
-    wash_folders_before_end()
+    # wash_folders_before_end()
 
 
-def wash_folders_before_end() -> None:
-    """This function remove all unecessary folders from the working sdirectory"""
+# def wash_folders_before_end() -> None:
+#     """This function remove all unecessary folders from the working sdirectory"""
 
-    try:
-        shutil.move(f".{os.sep}dist{os.sep}nt_users_tool.exe", f".{os.sep}nt_users_tool.exe")
-    except FileNotFoundError:
-        print("File not found : where is nt_users_tool.exe ?")
-    # remove unecessary files
-    shutil.rmtree(f".{os.sep}build")
-    shutil.rmtree(f".{os.sep}dist")
-    os.remove(f".{os.sep}nt_users_tool.spec")
+#     try:
+#         shutil.move(f".{os.sep}dist{os.sep}nt_users_tool.exe", f".{os.sep}nt_users_tool.exe")
+#     except FileNotFoundError:
+#         print("File not found : where is nt_users_tool.exe ?")
+#     # remove unecessary files
+#     shutil.rmtree(f".{os.sep}build")
+#     shutil.rmtree(f".{os.sep}dist")
+#     os.remove(f".{os.sep}nt_users_tool.spec")
 
 
 if __name__ == "__main__":
