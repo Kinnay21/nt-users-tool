@@ -78,7 +78,7 @@ jobs:
       run: |
         poetry run python .\make_exe.py
     - name: Upload artifacts
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: executable
         path: nt_users_tool.exe
