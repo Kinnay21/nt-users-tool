@@ -13,8 +13,6 @@ jobs:
         python-version: 3.11
     - name: Install dependencies
       run: |
-        ls
-        cd nt-users-tool
         poetry install
     - name: Analysing the code with pylint
       run: |
