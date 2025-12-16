@@ -77,10 +77,10 @@ jobs:
     - name: generate .exe file
       run: |
         poetry run python make_exe.py
-        ls
-    - name: Publish exe file
-      id: publish
-      run: dist/*.exe -type f -execdir echo 'script-file={}' >> $GITHUB_OUTPUT ';'
+        ls dist
+    # - name: Publish exe file
+    #   id: publish
+    #   run: dist/*.exe -type f -execdir echo 'script-file={}' >> $GITHUB_OUTPUT ';'
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
       with:
