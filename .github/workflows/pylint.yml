@@ -77,7 +77,7 @@ jobs:
     - name: generate .exe file
       run: |
         ls
-        poetry run python .\make_exe.py
+        poetry run python make_exe.py
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
       with:
