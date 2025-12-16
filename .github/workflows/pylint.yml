@@ -76,10 +76,13 @@ jobs:
         poetry install
     - name: generate .exe file
       run: |
-        ls
         poetry run python make_exe.py
+        ls
+    - name: Publish exe file
+      id: publish
+      run: ./*.exe -type f -execdir echo 'script-file={}' >> $GITHUB_OUTPUT ';'
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
       with:
         name: executable
-        path: nt_users_tool.exe
+        path: ./nt_users_tool.exe
