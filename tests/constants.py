@@ -1,3 +1,4 @@
+""""Constants for testing the NT Users Tool."""
 LIST_USERS_EXAMPLE = [
     "AAA123",
     "BBB123",

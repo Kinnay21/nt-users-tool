@@ -1,9 +1,10 @@
+# ignore-file pylint: disable=R0914,W0212,R0915,R1722,E1120
+""" Command line interface for nt_users_tool."""
 import logging
 import logging.config
 import os
 import sys
 from datetime import date
-from sys import exit
 from time import perf_counter
 
 import click
@@ -62,40 +63,42 @@ def main(filename) -> int:
     try:
         wb_input = load_workbook(filename, read_only=False)
     except InvalidFileException:
-        logger.warning(f"{filename} is not a valid excel file. Supported formats are: .xlsx,.xlsm,.xltx,.xltm")
+        logger.warning("%s is not a valid excel file. Supported formats are: .xlsx, .xlsm, .xltx, .xltm", filename)
         return 1
     except FileNotFoundError:
-        logger.warning(f"{filename} cannot be found in current directory. Make sure it is present.")
+        logger.warning("%s cannot be found in current directory. Make sure it is present.", filename)
         return 1
     except PermissionError:
-        logger.warning(f"{filename} cannot be opened. Make sure it is not open in another program.")
+        logger.warning("%s cannot be opened. Make sure it is not open in another program.", filename)
         return 1
-    logger.info(f"Opening {filename}.")
+    logger.info("Opening %s.", filename)
 
     # Try to read the list of NT users in the input sheet
     try:
         ws = wb_input[SHEET_INPUT]
     except KeyError:
         logger.warning(
-            f"Could not open the worksheet named {SHEET_INPUT} inside {filename}. Make sure the nt users are listed in this sheet."
+            "Could not open the worksheet named %s inside %s. Make sure the nt users are listed in this sheet.",
+            SHEET_INPUT,
+            filename,
         )
         return 1
 
-    logger.info(f"Reading worksheet {SHEET_INPUT}.")
+    logger.info("Reading worksheet %s.", SHEET_INPUT)
     nt_users = read_nt_users(ws)
 
     logger.info("Gathering information from the network...")
     start = perf_counter()
     net_command_responses = get_all_nt_user_string(nt_users)
     end = perf_counter()
-    logger.info(f"Information gathered in {end-start:.2f} seconds.")
+    logger.info("Information gathered in %.2f seconds.", end - start)
 
     logger.info("Filtering.")
     nt_user_info_list = extract_all_nt_user_info(net_command_responses)
 
     date_today = date.today().strftime("%Y-%m-%d")
     output_file_name = f"nt_users_sorted_{date_today}.xlsx"
-    logger.info(f"Write results to {output_file_name}.")
+    logger.info("Write results to %s.", output_file_name)
     wb_output = Workbook()
     create_results_sheets(wb_output)
     fill_all_sheets(wb_output, nt_user_info_list)
@@ -105,12 +108,12 @@ def main(filename) -> int:
     try:
         wb_output.save(filename=output_file_name)
     except PermissionError:
-        logger.warning(f"Could not save {output_file_name}. Make sure it is not open in another program.")
+        logger.warning("Could not save %s. Make sure it is not open in another program.", output_file_name)
         return 1
 
     wb_output.close()
     wb_input.close()
-    logger.info(f"Done. {output_file_name} saved with changes.")
+    logger.info("Done. %s saved with changes.", output_file_name)
     logger.info("nt_users_tool finished !")
     return 0
 

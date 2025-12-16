@@ -1,12 +1,11 @@
+""" This programm generate a nt_users_tool.exe file that allows to run the nt_users_toll without running the python project
+    You just need to run this file inside the folder src/nt_users_tool folder
+"""
 import os
 import platform
 import shutil
 
 import PyInstaller.__main__
-
-""" This programm generate a nt_users_tool.exe file that allows to run the nt_users_toll without running the python project
-    You just need to run this file inside the folder src/nt_users_tool folder
-"""
 
 
 def create():

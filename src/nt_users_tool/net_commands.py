@@ -1,3 +1,4 @@
+""" Module to handle the net user commands and extract relevant information."""
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import date
 from subprocess import PIPE, Popen
@@ -18,7 +19,8 @@ def get_nt_user_command_response(nt_user: str) -> str:
     # For security reasons, make sure that the input is only one word
     nt_user = nt_user.split(" ")[0].upper()
     command = f"net user /domain {nt_user}"
-    command_response, err = Popen(command, stdout=PIPE, errors="ignore").communicate()
+    with Popen(command, stdout=PIPE, errors="ignore") as process:
+        command_response, _ = process.communicate()
     # if the user does not exist, we change the command response to display the user name
     if len(command_response) < 100:
         command_response = f"User name       {nt_user}"
@@ -32,14 +34,14 @@ def get_all_nt_user_string(list_nt_user: List[str]) -> List[str]:
     :return: The list of net command reponses.
     """
     command_respones = []
-    with Bar("Processing", max=len(list_nt_user)) as bar:
+    with Bar("Processing", max=len(list_nt_user)) as text_bar:
         with ThreadPoolExecutor() as executor:
             future_to_net_response = {
                 executor.submit(get_nt_user_command_response, nt_user): nt_user for nt_user in list_nt_user
             }
             for future in as_completed(future_to_net_response):
                 command_respones.append(future.result())
-                bar.next()  # update the progress bar
+                text_bar.next()  # update the progress bar
     return command_respones
 
 
@@ -56,7 +58,7 @@ def extract_nt_user_info(net_command_response: str) -> NTUserInfo:
     name = ""
     expiration_date = ""
     for index, element in enumerate(list_of_user_info):
-        if element == "name" or element == "Benutzername":
+        if element in {"name", "Benutzername"}:
             nt_user = list_of_user_info[index + 1]
         elif element == "Name":
             name = (" ").join([list_of_user_info[index + 2].upper(), list_of_user_info[index + 3]])
@@ -71,8 +73,7 @@ def extract_nt_user_info(net_command_response: str) -> NTUserInfo:
     # if the user does not have an expiration date, the user name is ivalid and we return an adapted NTUserInfo
     if expiration_date == "":
         return NTUserInfo(name, nt_user, None)
-    else:
-        return NTUserInfo(name, nt_user, date(int(user_year), int(user_month), int(user_day)))
+    return NTUserInfo(name, nt_user, date(int(user_year), int(user_month), int(user_day)))
 
 
 def extract_all_nt_user_info(net_command_responses: List[str]) -> List[NTUserInfo]:

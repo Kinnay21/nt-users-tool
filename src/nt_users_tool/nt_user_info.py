@@ -1,3 +1,5 @@
+""" Module defining the NTUserInfo dataclass and NTUserStatus enum"""
+
 from datetime import date
 from enum import Enum
 from typing import NamedTuple
@@ -41,11 +43,10 @@ def evaluate_user_status(nt_user_info: NTUserInfo) -> NTUserStatus:
     days_to_expiration = (nt_user_info.expiration_date - _DATE_NOW).days
     if days_to_expiration <= de.DAYS_EXPIRED_LIMIT:
         return NTUserStatus.EXPIRED
-    elif de.DAYS_EXPIRED_LIMIT < days_to_expiration <= de.DAYS_EXPIRING_15_LIMIT:
+    if de.DAYS_EXPIRED_LIMIT < days_to_expiration <= de.DAYS_EXPIRING_15_LIMIT:
         return NTUserStatus.EXPIRING_15_DAYS
-    elif de.DAYS_EXPIRING_15_LIMIT < days_to_expiration <= de.DAYS_EXPIRING_30_LIMIT:
+    if de.DAYS_EXPIRING_15_LIMIT < days_to_expiration <= de.DAYS_EXPIRING_30_LIMIT:
         return NTUserStatus.EXPIRING_30_DAYS
-    elif de.DAYS_EXPIRING_30_LIMIT < days_to_expiration <= de.DAYS_EXPIRING_60_LIMIT:
+    if de.DAYS_EXPIRING_30_LIMIT < days_to_expiration <= de.DAYS_EXPIRING_60_LIMIT:
         return NTUserStatus.EXPIRING_60_DAYS
-    else:
-        return NTUserStatus.VALID
+    return NTUserStatus.VALID

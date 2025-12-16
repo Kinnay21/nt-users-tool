@@ -1,9 +1,12 @@
+""" Constants for NT Users Tool"""
 from enum import Enum, IntEnum
 
 DEFAULT_INPUT_FILE = "./nt_users_name.xlsx"
 
 
 class DaysExpiring(IntEnum):
+    """Days expiring limits"""
+
     DAYS_EXPIRED_LIMIT = 0
     DAYS_EXPIRING_15_LIMIT = 15
     DAYS_EXPIRING_30_LIMIT = 30
@@ -14,6 +17,8 @@ SHEET_INPUT = "nt_users"
 
 
 class Sheets(str, Enum):
+    """Sheets names"""
+
     SHEET_EXPIRED = "expired_users"
     SHEET_EXPIRES_15 = "expiring_15_users"
     SHEET_EXPIRES_30 = "expiring_30_users"
@@ -38,12 +43,16 @@ LAST_RELEVANT_ELEMENT_POSITION = 40
 
 # TO DO : 3.11 use ReprEnum
 class SheetSettingsInt(IntEnum):
+    """Sheet settings"""
+
     FIRST_COLUMN = 4
     NUMBER_OF_COLUMNS = 3
     COLUMN_WIDTH = 30
 
 
 class SheetSettingsStr(str, Enum):
+    """Sheet settings"""
+
     NAME_COLUMN = "D"
     NT_USER_COLUMN = "E"
     EXPIRATION_DATE_COLUMN = "F"
@@ -57,6 +66,8 @@ COLUMNS_LIST = [
 
 
 class Tables(str, Enum):
+    """Tables settings"""
+
     TABLE_STYLE = "TableStyleLight13"
     TABLE_NAME = "nt_users_table"
     TABLE_NAME_COLUMN = "Name"

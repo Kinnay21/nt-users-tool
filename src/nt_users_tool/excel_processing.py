@@ -1,3 +1,7 @@
+"""
+This module contains functions to read NT user IDs from an Excel worksheet
+"""
+
 from typing import List
 
 from openpyxl import Workbook
@@ -5,7 +9,6 @@ from openpyxl.worksheet.table import Table, TableStyleInfo
 from openpyxl.worksheet.worksheet import Worksheet
 
 from nt_users_tool.constants import COLUMNS_LIST
-from nt_users_tool.constants import Sheets
 from nt_users_tool.constants import Sheets as sh
 from nt_users_tool.constants import SheetSettingsInt as shi
 from nt_users_tool.constants import SheetSettingsStr as shs
@@ -37,7 +40,7 @@ def create_results_sheets(workbook: Workbook):
 
     :param workbook: The workbook in which to add the sheets.
     """
-    for sheet_name in Sheets:
+    for sheet_name in sh:
         workbook.create_sheet(sheet_name.value)
         workbook[sheet_name.value].column_dimensions[shs.NAME_COLUMN.value].width = shi.COLUMN_WIDTH.value
         workbook[sheet_name.value].column_dimensions[shs.NT_USER_COLUMN.value].width = shi.COLUMN_WIDTH.value / 2

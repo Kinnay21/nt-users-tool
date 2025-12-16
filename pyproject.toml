@@ -27,7 +27,9 @@ pytest = "*"
 pytest-cov = "*"
 pytest-mock = "*"
 black = {version = "^23.1a1", allow-prereleases = false}
-pandas = "^1.5.3"
+# pandas = "^1.5.3"
+pandas = "*"
+pylint = "*"
 
 [tool.pytest.ini_options]
 testpaths = [

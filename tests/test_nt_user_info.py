@@ -1,3 +1,4 @@
+"""Unit tests for nt_user_info module."""
 from datetime import date
 
 import pytest
@@ -42,6 +43,7 @@ from nt_users_tool.nt_user_info import NTUserInfo, NTUserStatus, evaluate_user_s
     ],
 )
 def test_evaluate_expiration_date(mocker, tests_user_status):
+    """Test evaluate_user_status function with different expiration dates."""
     # try all kind of expiration status
     mocker.patch("nt_users_tool.nt_user_info._DATE_NOW", date(2023, 2, 20))
     expected_values = getattr(NTUserStatus, tests_user_status["NTUserStatus"])
@@ -61,6 +63,7 @@ def test_evaluate_expiration_date(mocker, tests_user_status):
 
 
 def test_evaluate_expiration_date_invalid_name():
+    """Test evaluate_user_status function with invalid name."""
     # try invalid name expiration status
     expected_values = getattr(NTUserStatus, "INVALID_NAME")
 

@@ -34,3 +34,19 @@ repos:
           - "--select=B,C,E,F,W,T4,B9"
           # ignore warning error: E203 (whitespace before ':'), E501 (line too long) and W503 (line break before binary operator)
           - "--ignore=E203,E501,W503"
+    # pylint is a static code analysis tool fo Python
+-   repo: local
+    hooks:
+      - id: pylint
+        name: pylint
+        entry: poetry run pylint
+        language: system
+        types: [python]
+        args:
+          [
+            "-rn", # Only display messages
+            "-sn", # Don't display the score
+            "--rcfile=.pylintrc", # Link to your config file
+            "--extension-pkg-whitelist=pydantic", # Ignore errors from pydantic
+            # "src/", # Check all files in the src directory
+          ]

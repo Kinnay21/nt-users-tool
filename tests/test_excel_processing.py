@@ -1,3 +1,4 @@
+""" Tests for the excel_processing module."""
 import os
 
 import pandas as pd
@@ -10,6 +11,7 @@ from tests.constants import LIST_USERS_EXAMPLE
 
 
 def test_read_nt_users():
+    """Test the read_nt_users function."""
     expected_value = LIST_USERS_EXAMPLE
     wb_input = load_workbook("tests/test_nt_users_name_example.xlsx", read_only=False)
     test_worksheet = wb_input[SHEET_INPUT]
@@ -20,6 +22,7 @@ def test_read_nt_users():
 
 
 def test_create_results_sheets():
+    """Test the create_results_sheets function."""
     expected_workbook = load_workbook("tests/test_nt_users_sorted.xlsx", read_only=False)
 
     test_workbook = Workbook()
@@ -30,6 +33,7 @@ def test_create_results_sheets():
 
 
 def test_fill_all_sheets():
+    """Test the fill_all_sheets function."""
     # create the test workbook
     test_workbook = Workbook()
     create_results_sheets(test_workbook)
