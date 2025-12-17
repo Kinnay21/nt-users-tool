@@ -1,9 +1,10 @@
-name: Basic pipeline
+name: Master and manual
 
 on:
   push:
     branches:
       - master
+      - test
   workflow_dispatch:
 
 jobs:
