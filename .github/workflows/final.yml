@@ -1,0 +1,20 @@
+name: Basic pipeline
+
+on: [push]
+
+jobs:
+  job1:
+    runs-on: ubuntu-latest
+    steps:
+    - name: get code
+      uses: actions/checkout@v4
+    - name: list files
+      run: ls -la
+
+  job2:
+    runs-on: ubuntu-latest
+    steps:
+    - name: get code
+      uses: actions/checkout@v4
+    - name: list files
+      run: ls -la

@@ -1,4 +1,4 @@
-name: Pylint
+name: Lint, test and build project
 
 on: [push]
 
