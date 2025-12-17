@@ -1,6 +1,6 @@
 name: Basic pipeline
 
-on: [push]
+on: [push, workflow_dispatch]
 
 jobs:
   job1:
