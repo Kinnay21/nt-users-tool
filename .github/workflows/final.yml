@@ -1,4 +1,4 @@
-name: Using Reusable Workflow
+name: Environment Variables Example
 
 on: [push]
 
@@ -17,17 +17,4 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Output informations
-        run: |
-        echo "DB_NAME: ${{ env.DB_NAME }}"
-        echo "DB_USER: ${{ env.DB_USER }}"
-        echo "DB_PASSWORD: ${{ env.DB_PASSWORD }}"
-
-  build:
-
-    runs-on: ubuntu-latest
-    steps:
-      - name: Output informations
-        run: |
-        echo "DB_NAME: ${{ env.DB_NAME }}"
-        echo "DB_USER: ${{ env.DB_USER }}"
-        echo "DB_PASSWORD: ${{ env.DB_PASSWORD }}"
+        run: echo "${{ env.DB_NAME }}"
