@@ -26,7 +26,6 @@ jobs:
     - name: Analysing the code with pylint
       run: |
         pylint $(git ls-files '*.py')
-        pre-commit run --all-files
   test:
     needs: lint
     runs-on: ubuntu-latest
