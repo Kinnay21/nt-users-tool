@@ -17,4 +17,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Output informations
-        run: echo "${{ env.DB_NAME }}"
+        run: |
+          echo "${{ env.DB_NAME }}"
+          echo "${{ env.DB_USER }}"
+          echo "${{ env.DB_PASSWORD }}"
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Output informations
+        run: |
+          echo "${{ env.DB_NAME }}"
+          echo "${{ env.DB_USER }}"
+          echo "${{ env.DB_PASSWORD }}"
