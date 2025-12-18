@@ -27,7 +27,8 @@ jobs:
     - name: Publish exe file name
       id: publish
 #      run: find dist/*.exe -type f -execdir echo 'exe_file_name={}' >> $GITHUB_OUTPUT ';'
-      run: for %f in (dist\*.exe) do echo exe_file_name=%f >> %GITHUB_OUTPUT%
+      # run: for %f in (dist\*.exe) do echo exe_file_name=%f >> %GITHUB_OUTPUT%
+      run: Get-ChildItem dist\*.exe -File | ForEach-Object { Add-Content -Path $env:GITHUB_OUTPUT -Value "exe_file_name=$($_.FullName)" }
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
       with:
