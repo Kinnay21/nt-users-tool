@@ -1,0 +1,46 @@
+name: build project
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: windows-latest
+    outputs:
+      exe_file_name: ${{ steps.publish.outputs.exe_file_name }}
+    steps:
+    - name: get code
+      uses: actions/checkout@v4
+    - name: Set up Python 3.11
+      uses: actions/setup-python@v3
+      with:
+        python-version: 3.11
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install poetry
+        poetry config virtualenvs.in-project true --local
+        poetry install
+    - name: generate .exe file
+      run: |
+        poetry run python make_exe.py
+        ls dist
+    - name: Publish exe file name
+      id: publish
+      run: Get-ChildItem dist\*.exe -File | ForEach-Object { Add-Content -Path $env:GITHUB_OUTPUT -Value "exe_file_name=$($_.FullName)" }
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: executable
+        path: dist/nt_users_tool.exe
+  deploy:
+    needs: build
+    runs-on: windows-latest
+    steps:
+      - name: Get build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: executable
+      - name: Output contents
+        run: ls
+      - name: Output filename
+        run: echo ${{ needs.build.outputs.exe_file_name }}
