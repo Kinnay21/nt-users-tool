@@ -2,8 +2,6 @@ name: Environment Variables Example
 
 on: [push]
 
-
-
 env:
   DB_NAME  : demo_db
 
@@ -11,17 +9,9 @@ jobs:
   test:
     environment: testing
     env:
-      DB_USER: test_user
-      DB_PASSWORD: test_password
+      DB_USER: ${{ secrets.DB_USERNAME_SECRET }}
+      DB_PASSWORD: ${{ secrets.DB_PASSWORD_SECRET }}
 
-    runs-on: ubuntu-latest
-    steps:
-      - name: Output informations
-        run: |
-          echo "${{ env.DB_NAME }}"
-          echo "${{ env.DB_USER }}"
-          echo "${{ env.DB_PASSWORD }}"
-  build:
     runs-on: ubuntu-latest
     steps:
       - name: Output informations
