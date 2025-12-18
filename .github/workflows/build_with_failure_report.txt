@@ -1,4 +1,4 @@
-name: Using Reusable Workflow
+name: build
 
 on: [push]
 
@@ -28,15 +28,13 @@ jobs:
         name: executable
         path: dist/nt_users_tool
 
-  deploy:
-    needs: build
-    uses: ./.github/workflows/reusable.yaml
-    with:
-      artifact-name: executable
 
-  print-deploy-result:
-    needs: deploy
-    runs-on : ubuntu-latest
+  report:
+    needs: [build]
+    if: failure()
+    runs-on: ubuntu-latest
     steps:
-      - name: Print deploy output
-        run: echo "${{ needs.deploy.outputs.result }}"
+      - name: Output information
+        run: |
+          echo "Something went wrong"
+          echo "${{ toJSON(github) }}"

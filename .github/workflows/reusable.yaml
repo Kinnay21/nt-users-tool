@@ -1,0 +1,41 @@
+name: Reusable Deploy
+# the following line allows to a extrenal workflow to call this workflow
+on:
+  workflow_call:
+  # we can add input from the external worflow,
+    # for example to use extrenal info to use
+    inputs:
+      artifact-name:
+        description: 'The name of the artifact to download'
+        required: false # if true, the workflow will fail if note provided
+        default: dist
+        type: string
+    # # we can also add seccrets as inputs
+    # secrets:
+    #   some-secrets:
+    #     required: false
+    outputs:
+    # the workflow can provide a result
+      result:
+        description: 'The result of the deployment'
+        value: ${{ jobs.deploy.outputs.outcome }}
+jobs:
+  deploy:
+   # we need to specifiy the output of the job
+    outputs:
+      outcome: ${{ steps.set-result.outputs.step-result }}
+      # with steps.name-of-id-steps.outputs.name-of-output
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get Code
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ inputs.artifact-name }}
+      - name: List files
+        run: ls
+      - name: Output information
+        run: echo "Deploying & uploading"
+      - name: Set result output
+        # we can set the output of the workflow into GITHUB_OUTPUT key
+        id: set-result
+        run: echo "step-result=success" >> $GITHUB_OUTPUT
