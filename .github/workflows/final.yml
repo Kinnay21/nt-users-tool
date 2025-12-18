@@ -43,6 +43,6 @@ jobs:
         with:
           name: executable
       - name: Output contents
-        run: ls dist
+        run: ls
       - name: Output filename
         run: echo ${{ needs.build.outputs.exe_file_name }}
