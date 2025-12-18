@@ -7,6 +7,7 @@ repos:
     -   id: check-yaml # Check that your YAML files are parseable
     -   id: end-of-file-fixer # Makes sure files end in a newline and only a newline
     -   id: trailing-whitespace # Trims trailing whitespace
+        exclude: ^requirements\.txt$
 # # isort will sort alphabetically and automatically imports into sections and by type
 # -   repo: https://github.com/PyCQA/isort.git
 #     rev: 5.8.0
