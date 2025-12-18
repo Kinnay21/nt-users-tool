@@ -5,6 +5,8 @@ on: [push]
 jobs:
   build:
     runs-on: windows-latest
+    outputs:
+      exe_file_name: ${{ steps.publish.outputs.exe_file_name }}
     steps:
     - name: get code
       uses: actions/checkout@v4
@@ -22,8 +24,23 @@ jobs:
       run: |
         poetry run python make_exe.py
         ls dist
+    - name: Publish exe file name
+      id: publish
+      run: find dist/*.exe -type f -execdir echo 'exe_file_name={}' >> $GITHUB_OUTPUT ';'
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
       with:
         name: executable
         path: dist/nt_users_tool.exe
+  deploy:
+    needs: build
+    runs-on: windows-latest
+    steps:
+      - name: Get build artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: dist
+      - name: Output contents
+        run: ls dist
+      - name: Output filename
+        run: echo ${{ needs.build.outputs.exe_file_name }}
