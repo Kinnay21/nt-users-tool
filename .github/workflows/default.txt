@@ -14,20 +14,22 @@ jobs:
         python-version: 3.11
     - name: Install dependencies
       run: |
+        python -m venv .venv
+        source .venv/bin/activate
         python -m pip install --upgrade pip
-        pip install poetry
-        poetry config virtualenvs.in-project true --local
-        poetry install
+        pip install -e .
+        pip install -r requirements.txt
     - name: Analysing the code with pylint
       run: |
-        poetry run pylint $(git ls-files '*.py')
-        poetry run pre-commit run --all-files
-    - name: put the virtual env on the cache
+        source .venv/bin/activate
+        pylint $(git ls-files '*.py')
+    - name: Cache pip dependencies
       uses: actions/cache@v3
       with:
         path: .venv
-        key: ${{ runner.os }}-poetry-${{ hashFiles('**/poetry.lock') }}
-
+        key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+        restore-keys: |
+          ${{ runner.os }}-pip-
   test:
     needs: lint
     runs-on: ubuntu-latest
@@ -42,17 +44,17 @@ jobs:
       uses: actions/cache@v3
       with:
         path: .venv
-        key: ${{ runner.os }}-poetry-${{ hashFiles('**/poetry.lock') }}
+        key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
     - name: Install dependencies
       run: |
+        source .venv/bin/activate
         python -m pip install --upgrade pip
-        pip install poetry
-        poetry config virtualenvs.in-project true --local
-        poetry install
+        pip install -e .
+        pip install -r requirements.txt
     - name: test the code
       run: |
-        poetry run pytest tests/ --cov=nt_users_tool --cov-report=xml
-
+        source .venv/bin/activate
+        pytest tests/ --cov=nt_users_tool --cov-report=xml
   build:
     needs: test
     runs-on: ubuntu-latest
@@ -67,16 +69,17 @@ jobs:
       uses: actions/cache@v3
       with:
         path: .venv
-        key: ${{ runner.os }}-poetry-${{ hashFiles('**/poetry.lock') }}
+        key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
     - name: Install dependencies
       run: |
+        source .venv/bin/activate
         python -m pip install --upgrade pip
-        pip install poetry
-        poetry config virtualenvs.in-project true --local
-        poetry install
+        pip install -e .
+        pip install -r requirements.txt
     - name: generate .exe file
       run: |
-        poetry run python make_exe.py
+        source .venv/bin/activate
+        python make_exe.py
         ls dist
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
