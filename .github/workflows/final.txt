@@ -1,9 +1,6 @@
 name: Lint, test and build project
 
-on:
-  push:
-    branches:
-      - test-without-poetry
+on: [push]
 
 jobs:
   lint:
