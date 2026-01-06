@@ -75,7 +75,7 @@ jobs:
         source .venv/bin/activate
         python -m pip install --upgrade pip
         pip install -e .
-        pip install -r requirements.
+        pip install -r requirements.txt
     - name: generate .exe file
       run: |
         source .venv/bin/activate
