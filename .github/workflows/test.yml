@@ -83,6 +83,8 @@ jobs:
       with:
         name: wheels
         path: wheels/
+    - name: ls wheels folder
+      run: ls -la wheels/
     - name: Show file count
       run: echo ${{ needs.lint.outputs.file_count }}
     - name: Set script-file output
