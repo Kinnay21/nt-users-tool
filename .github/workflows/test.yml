@@ -30,7 +30,7 @@ jobs:
         pylint $(git ls-files '*.py')
     - name: Count files
       id: count_files
-      run: find . -type f | wc -l >> GITHUB_OUTPUT
+      run: echo "file_count=$(find . -type f | wc -l)" >> $GITHUB_OUTPUT
     - name: Show file count
       run: echo ${{ needs.lint.outputs.file_count }}
   test:
