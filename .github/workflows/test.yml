@@ -30,8 +30,7 @@ jobs:
         pylint $(git ls-files '*.py')
     - name: Count files
       id: count_files
-      run: find wheels/*.whl -type f -execdir echo 'script-file={}' >> $GITHUB_OUTPUT ';'
-      # run: echo "file_count=$(find . -type f | wc -l)" >> $GITHUB_OUTPUT
+      run: echo "file_count=$(find . -type f | wc -l)" >> $GITHUB_OUTPUT
     - name: Show file count
       run: echo ${{ needs.lint.outputs.file_count }}
   test:
@@ -83,3 +82,5 @@ jobs:
         path: wheels/
     - name: Show file count
       run: echo ${{ needs.lint.outputs.file_count }}
+    - name: Set script-file output
+      run: find wheels/*.whl -type f -execdir echo 'script-file={}' >> $GITHUB_OUTPUT ';'
