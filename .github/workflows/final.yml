@@ -1,12 +1,9 @@
 name: Lint, test and build project
 
 on:
-  workflow_dispatch:
-    inputs:
-      python_version:
-        description: 'Python version to use (3.8, 3.9, 3.10, 3.11)'
-        required: true
-        default: '3.11'
+  push:
+    branches:
+      - test-without-poetry
 
 jobs:
   lint:
