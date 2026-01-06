@@ -87,6 +87,8 @@ jobs:
       run: ls -la wheels/
     - name: Show file count
       run: echo ${{ needs.lint.outputs.file_count }}
+    - name: check file name
+      run: find wheels/*.whl -type f -execdir echo 'script-file={}' ';'
     - name: Set script-file output
       id: publish
       run: find wheels/*.whl -type f -execdir echo 'script-file={}' >> $GITHUB_OUTPUT ';'
