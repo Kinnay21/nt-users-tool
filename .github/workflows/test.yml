@@ -8,8 +8,6 @@ on:
 jobs:
   lint:
     runs-on: ubuntu-latest
-    outputs:
-      file_count: ${{ steps.count_files.outputs.file_count }}
     steps:
     - name: get code
       uses: actions/checkout@v4
@@ -28,11 +26,13 @@ jobs:
       run: |
         source .venv/bin/activate
         pylint $(git ls-files '*.py')
-    - name: Count files
-      id: count_files
-      run: echo "file_count=$(find . -type f | wc -l)" >> $GITHUB_OUTPUT
-    - name: Show file count
-      run: echo ${{ needs.lint.outputs.file_count }}
+    - name: Cache pip dependencies
+      uses: actions/cache@v3
+      with:
+        path: .venv
+        key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+        restore-keys: |
+          ${{ runner.os }}-pip-
   test:
     needs: lint
     runs-on: ubuntu-latest
@@ -43,6 +43,11 @@ jobs:
       uses: actions/setup-python@v3
       with:
         python-version: 3.11
+    - name: Cache dependencies
+      uses: actions/cache@v3
+      with:
+        path: .venv
+        key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
     - name: Install dependencies
       run: |
         python -m venv .venv
@@ -55,9 +60,6 @@ jobs:
         source .venv/bin/activate
         pytest tests/ --cov=nt_users_tool --cov-report=xml
   build:
-    outputs:
-    # you can use the name that you want
-      script-file: ${{ steps.publish.outputs.script-file }}
     needs: test
     runs-on: ubuntu-latest
     steps:
@@ -67,6 +69,11 @@ jobs:
       uses: actions/setup-python@v3
       with:
         python-version: 3.11
+    - name: Cache dependencies
+      uses: actions/cache@v3
+      with:
+        path: .venv
+        key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
     - name: Install dependencies
       run: |
         python -m venv .venv
@@ -83,14 +90,3 @@ jobs:
       with:
         name: wheels
         path: wheels/
-    - name: ls wheels folder
-      run: ls -la wheels/
-    - name: Show file count
-      run: echo ${{ needs.lint.outputs.file_count }}
-    - name: check file name
-      run: find wheels/*.whl -type f -execdir echo 'script-file={}' ';'
-    - name: Set script-file output
-      id: publish
-      run: find wheels/*.whl -type f -execdir echo 'script-file={}' >> $GITHUB_OUTPUT ';'
-    - name: Output filename
-      run: echo ${{ needs.build.outputs.script-file }}
