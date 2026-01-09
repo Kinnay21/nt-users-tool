@@ -9,8 +9,8 @@ from nt_users_tool.nt_user_info import NTUserInfo, NTUserStatus, evaluate_user_s
 
 def test_python_version():
     """Test the read_nt_users function."""
-    # Fail the test if Python version is 3.10
-    assert not (sys.version_info.major == 3 and sys.version_info.minor == 10), "This test fails on Python 3.10"
+    # Fail the test if Python version is 3.12
+    assert not (sys.version_info.major == 3 and sys.version_info.minor == 12), "This test fails on Python 3.10"
 
 
 @pytest.mark.parametrize(
