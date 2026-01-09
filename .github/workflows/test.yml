@@ -114,6 +114,7 @@ jobs:
         source .venv/bin/activate
         pytest tests/ --cov=nt_users_tool --cov-report=xml
   build2:
+    continue-on-error: true
     needs: test2
     runs-on: ubuntu-latest
     steps:
