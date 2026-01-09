@@ -93,19 +93,16 @@ jobs:
         path: wheels/
 
   test2:
-    environment: testing
-    env:
-      PYTHON_VERSION: ${{ vars.python_version }}
     continue-on-error: true
     needs: lint
     runs-on: ubuntu-latest
     steps:
     - name: get code
       uses: actions/checkout@v4
-    - name: Set up Python ${{ env.PYTHON_VERSION }}
+    - name: Set up Python 3.12
       uses: actions/setup-python@v3
       with:
-        python-version: ${{ env.PYTHON_VERSION }}
+        python-version: 3.12
     - name: Install dependencies
       run: |
         python -m venv .venv
@@ -118,18 +115,15 @@ jobs:
         source .venv/bin/activate
         pytest tests/ --cov=nt_users_tool --cov-report=xml
   build2:
-    environment: testing
-    env:
-      PYTHON_VERSION: ${{ vars.python_version }}
     needs: test2
     runs-on: ubuntu-latest
     steps:
     - name: get code
       uses: actions/checkout@v4
-    - name: Set up Python ${{ env.PYTHON_VERSION }}
+    - name: Set up Python 3.12
       uses: actions/setup-python@v3
       with:
-        python-version: ${{ env.PYTHON_VERSION }}
+        python-version: 3.12
     - name: Install dependencies
       run: |
         python -m venv .venv
