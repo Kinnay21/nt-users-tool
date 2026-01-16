@@ -36,3 +36,8 @@ jobs:
       run: |
         source .venv/bin/activate
         pip wheel . -w wheels
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: wheels
+        path: wheels/
