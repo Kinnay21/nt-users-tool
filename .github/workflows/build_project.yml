@@ -37,6 +37,7 @@ jobs:
         source .venv/bin/activate
         pip wheel . -w wheels
     - name: Upload artifacts
+      if: inputs.python-version == '3.11'
       uses: actions/upload-artifact@v4
       with:
         name: wheels
