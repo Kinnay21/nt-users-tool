@@ -62,10 +62,35 @@ jobs:
 
   build:
     needs: test
-    uses: ./.github/workflows/build_project.yml
-    with:
-      python-version: 3.11
-
+    runs-on: ubuntu-latest
+    steps:
+    - name: get code
+      uses: actions/checkout@v4
+    - name: Set up Python 3.11
+      uses: actions/setup-python@v3
+      with:
+        python-version: 3.11
+    - name: Cache dependencies
+      uses: actions/cache@v3
+      with:
+        path: .venv
+        key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+    - name: Install dependencies
+      run: |
+        python -m venv .venv
+        source .venv/bin/activate
+        python -m pip install --upgrade pip
+        pip install -e .
+        pip install -r requirements.txt
+    - name: build the project
+      run: |
+        source .venv/bin/activate
+        pip wheel . -w wheels
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: wheels
+        path: wheels/
 
   test2:
     environment: testing
@@ -92,12 +117,27 @@ jobs:
       run: |
         source .venv/bin/activate
         pytest tests/ --cov=nt_users_tool --cov-report=xml
-
   build2:
     environment: testing
     env:
       PYTHON_VERSION: ${{ vars.python_version }}
     needs: test2
-    uses: ./.github/workflows/build_project.yml
-    with:
-      python-version: ${{ env.PYTHON_VERSION }}
+    runs-on: ubuntu-latest
+    steps:
+    - name: get code
+      uses: actions/checkout@v4
+    - name: Set up Python ${{ env.PYTHON_VERSION }}
+      uses: actions/setup-python@v3
+      with:
+        python-version: ${{ env.PYTHON_VERSION }}
+    - name: Install dependencies
+      run: |
+        python -m venv .venv
+        source .venv/bin/activate
+        python -m pip install --upgrade pip
+        pip install -e .
+        pip install -r requirements.txt
+    - name: build the project
+      run: |
+        source .venv/bin/activate
+        pip wheel . -w wheels
